@@ -1,7 +1,4 @@
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class Main {
     public static void print(String value) {
@@ -62,8 +59,54 @@ public class Main {
     }
 
 
+
+    public static void completableFutureExample() {
+        ExecutorService exec = Executors.newSingleThreadExecutor();
+
+        CompletableFuture<Integer> f = CompletableFuture.supplyAsync(() -> {
+            int s = 0;
+            for(int i = 0; i < 100000; i++) {
+                for(int j = 0; j < 100000; j++) {
+                    s += i - j;
+                }
+            }
+            System.out.println("completableFuture has finished, s = " + s);
+            return 0;
+        }, exec);
+
+
+        // false
+        System.out.println("f.isDone() = " + f.isDone());
+
+        // We can chain two long-running tasks together
+        CompletableFuture<Integer> f2 = f.thenApply((input) -> {
+            int s = 0;
+            for(int i = 0; i < 100000; i++) {
+                for(int j = 0; j < 100000; j++) {
+                    s += i - j;
+                }
+            }
+            print("input = " + input);
+            return input - s;
+        });
+
+        // false
+        System.out.println("f2.isDone() = " + f2.isDone());
+
+        try {
+            // completableFuture.get() will wait for task to finishe and then execute
+            int result = f2.get();
+            System.out.println("f2.get() = " + result);
+        }
+        catch(Exception e) {e.printStackTrace();}
+
+        // both are true
+        print("f.isDone() = " + f.isDone());
+        print("f2.isDone() = " + f2.isDone());
+    }
+
+
     public static void main(String[] args) {
-        callableExample();
-//        futureExample();
+        completableFutureExample();
     }
 }
