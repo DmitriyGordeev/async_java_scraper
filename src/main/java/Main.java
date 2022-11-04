@@ -9,20 +9,42 @@ public class Main {
     }
 
 
+    public static void callableExample() {
+        Callable<Integer> c = () -> {
+            int s = 0;
+            for(int i = 0; i < 100000; i++) {
+                for(int j = 0; j < 100000; j++) {
+                    s += 1 + 2 * j;
+                }
+            }
+            System.out.println("callable has finished");
+            return s;
+        };
+
+        try {
+            int s = c.call();
+            print("s = " + s);
+        }
+        catch(Exception e) {e.printStackTrace();}
+
+        System.out.println("callableExample() end");
+    }
+
+
     public static void futureExample() {
         ExecutorService executor = Executors.newFixedThreadPool(1);
         Future<Integer> future = executor.submit(() -> {
             int s = 0;
             for(int i = 0; i < 100000; i++) {
                 for(int j = 0; j < 100000; j++) {
-                    s += i + j;
+                    s += 1 + 2 * j;
                 }
             }
             System.out.println("future has finished, s = " + s);
             return 1;
         });
 
-        System.out.println("line here");
+        System.out.println("futureExample() end");
 
         // Wait while future is Done
         while (!future.isDone()) {
@@ -41,17 +63,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        futureExample();
-
-//        Callable<Void> c = () -> {
-//            for(int i = 0; i < 10000000; i++) {
-//                for(int j = 0; j < 100000; j++) {
-//                    int l = i + j;
-//                }
-//            }
-//            System.out.println("future has finished");
-//            return null;
-//        };
-
+        callableExample();
+//        futureExample();
     }
 }
