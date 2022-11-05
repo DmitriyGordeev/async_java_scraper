@@ -1,14 +1,10 @@
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.ExecutionException;
+
 
 public class TestHtmlParser {
 
@@ -52,13 +48,32 @@ public class TestHtmlParser {
         HtmlParser parser = new HtmlParser();
         try {
             var map = parser.parseFeed(html);
+        }
+        catch(Exception e) { e.printStackTrace(); }
+    }
+
+
+    @Test
+    void testParseArticle() {
+        String html = "";
+        try {
+            var r = Files.lines(Path.of("article.html"), StandardCharsets.UTF_8);
+            html = String.join("\n", r.toList());
+        }
+        catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+
+        // Parsing feed and extract urls to specific articles
+        HtmlParser parser = new HtmlParser();
+        try {
+            var article = parser.parseArticle(html);
             int A = 1000;
         }
         catch(Exception e) { e.printStackTrace(); }
 
     }
-
-
 
 
 

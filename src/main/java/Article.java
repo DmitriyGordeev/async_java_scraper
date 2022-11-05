@@ -1,7 +1,12 @@
 
 public class Article {
-    public String url;
-    public String title;
-    public String text;
+    public String topic = "";
+    public String url = "";
+    public String headline = "";
+    public String text = "";
     public String[] parsingErrors;
+
+    public Article() {
+        parsingErrors = new String[2];
+    }
 }

@@ -17,6 +17,7 @@ public class HtmlParser {
             throw new Exception("Couldn't find div.rubric_lenta");
         }
 
+        // map: (url) -> (headline)
         HashMap<String, String> out = new HashMap<>();
         for (var item: items) {
             Elements articles = item.select("article");
@@ -29,6 +30,30 @@ public class HtmlParser {
             out.put(baseUrl + link, headline);
         }
         return out;
+    }
+
+
+    public Article parseArticle(String html) throws Exception {
+        Article result = new Article();
+        Document doc = Jsoup.parse(html);
+        Elements articles = doc.select("div.lenta_top_doc > article");
+        if (articles.size() == 0) {
+            throw new Exception("[parseArticle()] Couldn't find selector: div.lenta_top_doc > article");
+        }
+
+        result.headline = articles.get(0).attr("data-article-title");
+        result.topic = articles.get(0).attr("data-article-rubric-name");
+
+        // parsing article's text
+        var articleBody = articles.get(0).select("div.doc__body");
+        if (articleBody.size() == 0)
+            result.parsingErrors[0] = "Couldn't find element: div.doc__body";
+
+        var textElements = articleBody.get(0).select("p.doc__text");
+        for (var t : textElements)
+            result.text += t.text() + "\n";
+
+        return result;
     }
 
 
