@@ -30,11 +30,11 @@ public class Main {
 
 
     public static void futureExample() {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Integer> future = executor.submit(() -> {
-            int s = 0;
-            for(int i = 0; i < 100000; i++) {
-                for(int j = 0; j < 100000; j++) {
+            long s = 0;
+            for(var i = 0; i < 100000; i++) {
+                for(var j = 0; j < 100000; j++) {
                     s += 1 + 2 * j;
                 }
             }
@@ -42,11 +42,10 @@ public class Main {
             return 1;
         });
 
-        System.out.println("futureExample() end");
+        System.out.println("reaching this line while 'future' is still running");
 
         // Wait while future is Done
         while (!future.isDone()) {
-            int A = 1000;
             try {
                 print("future.isDone() = " + future.isDone() + " , future.get() = " + future.get());
             }
@@ -55,7 +54,7 @@ public class Main {
             }
         }
 
-        try { print("AFTER: " + future.get() + ", future.isDone() = " + future.isDone()); }
+        try { print("On done: future.get() = " + future.get() + ", future.isDone() = " + future.isDone()); }
         catch(Exception e) {e.printStackTrace();}
     }
 
@@ -63,45 +62,42 @@ public class Main {
     public static void completableFutureExample() {
         ExecutorService exec = Executors.newSingleThreadExecutor();
 
-        CompletableFuture<Integer> f = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
             int s = 0;
             for(int i = 0; i < 100000; i++) {
                 for(int j = 0; j < 100000; j++) {
                     s += i - j;
                 }
             }
-            System.out.println("completableFuture has finished, s = " + s);
+            System.out.println("completableFuture f1 has finished, s = " + s);
             return 0;
         }, exec);
 
+        System.out.println("Reaching this line while 'future' f1 is still running, f1.isDone() = " + f1.isDone());
 
-        // false
-        System.out.println("f.isDone() = " + f.isDone());
-
-        // We can chain two long-running tasks together
-        CompletableFuture<Integer> f2 = f.thenApply((input) -> {
-            int s = 0;
-            for(int i = 0; i < 100000; i++) {
-                for(int j = 0; j < 100000; j++) {
+        // The main difference from a regular Future is that we can chain
+        // functions and schedule some execution right after CompletableFuture isDone
+        CompletableFuture<Long> f2 = f1.thenApply((input) -> {
+            long s = 0;
+            for(var i = 0; i < 100000; i++) {
+                for(var j = 0; j < 100000; j++) {
                     s += i - j;
                 }
             }
-            print("input = " + input);
             return input - s;
         });
 
-        // false
-        System.out.println("f2.isDone() = " + f2.isDone());
+        System.out.println("Reaching this line while 'future' f2 is still running, f2.isDone() = " + f2.isDone());
 
         try {
-            // completableFuture.get() will wait for task to finishe and then execute
-            int result = f2.get();
+            // completableFuture.get() will wait (block) until task is finished and then pass the execution further
+            var result = f2.get();
             System.out.println("f2.get() = " + result);
         }
         catch(Exception e) {e.printStackTrace();}
 
         // both are true
-        print("f.isDone() = " + f.isDone());
+        print("f1.isDone() = " + f1.isDone());
         print("f2.isDone() = " + f2.isDone());
     }
 
