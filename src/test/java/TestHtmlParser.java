@@ -1,12 +1,10 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.ExecutionException;
 
 public class TestHtmlParser {
 
@@ -36,37 +34,16 @@ public class TestHtmlParser {
 
     @Test
     void testSimpleHttpRequest()  {
+        // Simple example of async GET request
+        var future = SimpleHttpClient.asyncGET("https://tradingeconomics.com/stream");
+        System.out.println("[false] f.isDone() = " + future.isDone());
 
-        HttpURLConnection connection = null;
         try {
-            //Create connection
-            URL url = new URL("https://tradingeconomics.com/stream");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type", "text/html");
-            connection.setRequestProperty("User-Agent",
-                            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " +
-                            "(KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36");
-
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\n');
-            }
-            rd.close();
-            System.out.println(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
+            var response = future.get();
+            System.out.println("response: " + response);
         }
-
-
+        catch(InterruptedException | ExecutionException e ) {
+            e.printStackTrace();
+        }
     }
 }
