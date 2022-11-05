@@ -1,3 +1,7 @@
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -33,17 +37,29 @@ public class TestHtmlParser {
 
 
     @Test
-    void testSimpleHttpRequest()  {
-        // Simple example of async GET request
-        var future = SimpleHttpClient.asyncGET("https://tradingeconomics.com/stream");
-        System.out.println("[false] f.isDone() = " + future.isDone());
-
+    void testParseFeed() {
+        String html = "";
         try {
-            var response = future.get();
-            System.out.println("response: " + response);
+            var r = Files.lines(Path.of("feed.html"), StandardCharsets.UTF_8);
+            html = String.join("\n", r.toList());
         }
-        catch(InterruptedException | ExecutionException e ) {
-            e.printStackTrace();
+        catch(IOException ioException) {
+            ioException.printStackTrace();
         }
+
+
+        // Parsing feed and extract urls to specific articles
+        HtmlParser parser = new HtmlParser();
+        try {
+            var map = parser.parseFeed(html);
+            int A = 1000;
+        }
+        catch(Exception e) { e.printStackTrace(); }
+
     }
+
+
+
+
+
 }
