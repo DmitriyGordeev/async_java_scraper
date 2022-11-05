@@ -7,8 +7,8 @@ public class Main {
 
 
     public static void callableExample() {
-        Callable<Integer> c = () -> {
-            int s = 0;
+        Callable<Long> c = () -> {
+            long s = 0;
             for(int i = 0; i < 100000; i++) {
                 for(int j = 0; j < 100000; j++) {
                     s += 1 + 2 * j;
@@ -19,8 +19,9 @@ public class Main {
         };
 
         try {
-            int s = c.call();
-            print("s = " + s);
+            print("Starting loop, will take some time");
+            long result = c.call();
+            print("c.call() = " + result);
         }
         catch(Exception e) {e.printStackTrace();}
 
@@ -57,7 +58,6 @@ public class Main {
         try { print("AFTER: " + future.get() + ", future.isDone() = " + future.isDone()); }
         catch(Exception e) {e.printStackTrace();}
     }
-
 
 
     public static void completableFutureExample() {
