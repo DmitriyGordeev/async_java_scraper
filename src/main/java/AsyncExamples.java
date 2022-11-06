@@ -1,5 +1,7 @@
 import java.util.concurrent.*;
 
+
+// this is just simple examples showing how to work with Callable, Future and CompletableFuture
 public class AsyncExamples {
 
     public static void print(String value) {

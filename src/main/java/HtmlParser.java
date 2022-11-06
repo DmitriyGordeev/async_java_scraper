@@ -5,8 +5,12 @@ import org.jsoup.select.Elements;
 
 import java.util.HashMap;
 
+
+/** Simple wrapper class around two html-parsing methods */
 public class HtmlParser {
 
+    /** This method parses news feed from html page and outputs
+     * a map with key:url -> value:news headline */
     public HashMap<String, String> parseFeed(String html) throws Exception {
         String baseUrl = "https://www.kommersant.ru/";
         Document doc = Jsoup.parse(html);
@@ -32,15 +36,15 @@ public class HtmlParser {
         return out;
     }
 
-
+    /** This method accepts html page and parses Article object  */
     public Article parseArticle(String html) throws Exception {
-        Article result = new Article();
         Document doc = Jsoup.parse(html);
         Elements articles = doc.select("div.lenta_top_doc > article");
         if (articles.size() == 0) {
             throw new Exception("[parseArticle()] Couldn't find selector: div.lenta_top_doc > article");
         }
 
+        Article result = new Article();
         result.headline = articles.get(0).attr("data-article-title");
         result.topic = articles.get(0).attr("data-article-rubric-name");
 
