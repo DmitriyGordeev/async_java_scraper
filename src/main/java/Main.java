@@ -3,8 +3,12 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class Main {
 
+/** This app parses news feed from kommersant.ru from specified url (news topic)
+ * And performs async download and parsing of specific articles from specified page */
+
+
+public class Main {
 
     public static void main(String[] args) {
 
@@ -47,6 +51,8 @@ public class Main {
                 Article article = null;
                 try {
                     article = parser.parseArticle(html);
+
+                    // HERE we get Article objects correctly
                     System.out.println(article);
                 }
                 catch(Exception e) { e.printStackTrace(); }
