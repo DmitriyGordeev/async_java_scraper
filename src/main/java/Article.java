@@ -9,4 +9,9 @@ public class Article {
     public Article() {
         parsingErrors = new String[2];
     }
+
+    @Override
+    public String toString() {
+        return "topic: " + topic + ", headline:" + headline;
+    }
 }

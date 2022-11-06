@@ -8,28 +8,28 @@ import java.nio.file.Path;
 
 public class TestHtmlParser {
 
-    @Test
-    void testSimpleFileReading() {
-        // TODO: remove this test
-        try {
-            var r = Files.lines(Path.of("file.txt"), StandardCharsets.UTF_8);
-            String text = String.join("\n", r.toList());
-            int A = 100;
-        }
-        catch(IOException ioException) {
-            ioException.printStackTrace();
-        }
-    }
-
-    @Test
-    void testSimpleFileWriting() throws IOException {
-        // TODO: remove this test
-        String str = "HelloW";
-        FileOutputStream outputStream = new FileOutputStream("file_w.txt");
-        byte[] strToBytes = str.getBytes();
-        outputStream.write(strToBytes);
-        outputStream.close();
-    }
+//    @Test
+//    void testSimpleFileReading() {
+//        // TODO: remove this test
+//        try {
+//            var r = Files.lines(Path.of("file.txt"), StandardCharsets.UTF_8);
+//            String text = String.join("\n", r.toList());
+//            int A = 100;
+//        }
+//        catch(IOException ioException) {
+//            ioException.printStackTrace();
+//        }
+//    }
+//
+//    @Test
+//    void testSimpleFileWriting() throws IOException {
+//        // TODO: remove this test
+//        String str = "HelloW";
+//        FileOutputStream outputStream = new FileOutputStream("file_w.txt");
+//        byte[] strToBytes = str.getBytes();
+//        outputStream.write(strToBytes);
+//        outputStream.close();
+//    }
 
 
     @Test
@@ -72,7 +72,6 @@ public class TestHtmlParser {
             int A = 1000;
         }
         catch(Exception e) { e.printStackTrace(); }
-
     }
 
 

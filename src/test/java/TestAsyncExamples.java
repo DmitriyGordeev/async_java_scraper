@@ -10,19 +10,19 @@ public class TestAsyncExamples {
     @Test
     void testCallableExample() {
         // This is synchronous
-        Main.callableExample();
+        AsyncExamples.callableExample();
     }
 
 
     @Test
     void testFutureExample() {
-        Main.futureExample();
+        AsyncExamples.futureExample();
     }
 
 
     @Test
     void testCompletableFuture() {
-        Main.completableFutureExample();
+        AsyncExamples.completableFutureExample();
     }
 
 
@@ -32,7 +32,7 @@ public class TestAsyncExamples {
         var future = SimpleHttpClient.asyncGET("https://www.kommersant.ru//doc/5651441");
 
         try {
-            var response = future.get();
+            var response = future.get();        // waits for the future to be finished
             System.out.println("response: " + response);
 
             FileOutputStream outputStream = new FileOutputStream("article.html");
