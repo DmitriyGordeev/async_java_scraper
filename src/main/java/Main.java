@@ -4,7 +4,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
-/** This app parses news feed from kommersant.ru from specified url (news topic)
+
+/**
+ * This program is a quick cheat-sheet of using basic async programming in java
+ *
+ * The app parses news feed from kommersant.ru from specified url (news topic)
  * And performs async download and parsing of specific articles from specified page */
 
 
@@ -12,11 +16,12 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // specify news feed url to parse links from
         String rootUrl = "https://www.kommersant.ru/rubric/3";
 
+        // Get html body with GET request
+        // This is the same as synchronous behavior
         var future = SimpleHttpClient.asyncGET(rootUrl);
-
-        // getting the feed
         String feedHtml = "";
         try {
             feedHtml = future.get();        // waits for the future to be finished
@@ -24,9 +29,9 @@ public class Main {
         catch(InterruptedException | ExecutionException e) { e.printStackTrace(); }
 
 
-        // parsing the feed page
+        // parsing the feed page - getting urls leading to specific pages
         HtmlParser parser = new HtmlParser();
-        HashMap<String, String> url2headline = new HashMap<>();
+        HashMap<String, String> url2headline;
         try {
             url2headline = parser.parseFeed(feedHtml);
         }
@@ -44,16 +49,13 @@ public class Main {
         ArrayList<CompletableFuture<Article>> futures = new ArrayList<>();
         for (String url : url2headline.keySet()) {
 
-            // this future will download html of article and will try parse
-            // the result into Article object
+            // this future will download html of article and then will parse
+            // the result into 'Article' object
             CompletableFuture<Article> f = SimpleHttpClient.asyncGET(url).thenApply((html) -> {
-                System.out.println("this future has finished");
                 Article article = null;
                 try {
                     article = parser.parseArticle(html);
-
-                    // HERE we get Article objects correctly
-                    System.out.println(article);
+                    System.out.println("parsed Article: " + article);
                 }
                 catch(Exception e) { e.printStackTrace(); }
                 return article;

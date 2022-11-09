@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileOutputStream;
@@ -33,7 +34,8 @@ public class TestAsyncExamples {
 
         try {
             var response = future.get();        // waits for the future to be finished
-            System.out.println("response: " + response);
+
+            Assertions.assertTrue(response.length() > 0);
 
             FileOutputStream outputStream = new FileOutputStream("article.html");
             byte[] strToBytes = response.getBytes();

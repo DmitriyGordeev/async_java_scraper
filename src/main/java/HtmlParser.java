@@ -9,7 +9,7 @@ import java.util.HashMap;
 /** Simple wrapper class around two html-parsing methods */
 public class HtmlParser {
 
-    /** This method parses news feed from html page and outputs
+    /** This method parses news feed from html page and returns
      * a map with key:url -> value:news headline */
     public HashMap<String, String> parseFeed(String html) throws Exception {
         String baseUrl = "https://www.kommersant.ru/";
@@ -36,7 +36,7 @@ public class HtmlParser {
         return out;
     }
 
-    /** This method accepts html page and parses Article object  */
+    /** This method parses Article object from html */
     public Article parseArticle(String html) throws Exception {
         Document doc = Jsoup.parse(html);
         Elements articles = doc.select("div.lenta_top_doc > article");
